@@ -51,10 +51,17 @@
             margin: 40px 0 20px;
         }
 
-        .form-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
+        /* Row grouping for paired inputs */
+        .form-row {
+            display: flex;
             gap: 20px;
+            flex-wrap: wrap;
+            margin-bottom: 15px;
+        }
+
+        .form-row .form-group {
+            flex: 1;
+            min-width: 200px;
         }
 
         .form-group {
@@ -170,10 +177,6 @@
 
         /* Media queries for mobile responsiveness */
         @media (max-width: 768px) {
-            .form-grid {
-                grid-template-columns: 1fr;
-            }
-            
             .container {
                 padding: 20px;
             }
@@ -206,6 +209,10 @@
                 padding: 8px 15px;
                 margin: 5px 0;
             }
+            
+            .form-row {
+                flex-direction: column;
+            }
         }
     </style>
 </head>
@@ -224,49 +231,56 @@
         </div>
 
         <form id="dataForm">
-            <div class="form-grid">
+            <!-- Trial Number & Time Duration on the same line -->
+            <div class="form-row">
                 <div class="form-group">
                     <label>Trial Number</label>
                     <select id="trialNumber" required>
                         <option value="">Select Trial</option>
                     </select>
                 </div>
-
                 <div class="form-group">
                     <label>Time Duration</label>
                     <input type="text" id="timeDuration" readonly>
                 </div>
+            </div>
 
+            <!-- Ambient Temperature fields on the same line -->
+            <div class="form-row">
                 <div class="form-group">
                     <label>Initial Ambient Temp (°C)</label>
                     <input type="number" step="0.1" id="initialAmbient" required>
                 </div>
-
                 <div class="form-group">
                     <label>Final Ambient Temp (°C)</label>
                     <input type="number" step="0.1" id="finalAmbient" required>
                 </div>
+            </div>
 
-                <div class="form-group">
-                    <label>Water Temperature (°C)</label>
-                    <input type="number" step="0.1" id="waterTemp" required>
-                </div>
+            <!-- Water Temperature as a standalone field -->
+            <div class="form-group">
+                <label>Water Temperature (°C)</label>
+                <input type="number" step="0.1" id="waterTemp" required>
+            </div>
 
+            <!-- Humidity fields on the same line -->
+            <div class="form-row">
                 <div class="form-group">
                     <label>Initial Humidity (%)</label>
                     <input type="number" step="0.1" id="initialHumidity" required>
                 </div>
-
                 <div class="form-group">
                     <label>Final Humidity (%)</label>
                     <input type="number" step="0.1" id="finalHumidity" required>
                 </div>
+            </div>
 
+            <!-- Light Intensity fields on the same line -->
+            <div class="form-row">
                 <div class="form-group">
                     <label>Initial Light Intensity (lux)</label>
                     <input type="number" id="initialLight" required>
                 </div>
-
                 <div class="form-group">
                     <label>Final Light Intensity (lux)</label>
                     <input type="number" id="finalLight" required>
