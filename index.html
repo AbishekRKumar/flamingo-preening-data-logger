@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flamingo Preening Study</title>
+    <style>
+        :root {
+            --primary: #FF6B6B;
+            --secondary: #4ECDC4;
+            --background: linear-gradient(135deg, #ffd9da 0%, #c2e9fb 100%);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--background);
+            min-height: 100vh;
+            padding: 20px;
+            margin: 0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 30px;
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: var(--primary);
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+            font-weight: 600;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            border-color: var(--secondary);
+            outline: none;
+            box-shadow: 0 0 8px rgba(78, 205, 196, 0.3);
+        }
+
+        button {
+            background: var(--primary);
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 18px;
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            background: #FF5252;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4);
+        }
+
+        .data-table {
+            margin-top: 30px;
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .data-table th, .data-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        .data-table th {
+            background: var(--secondary);
+            color: white;
+        }
+
+        .data-table tr:hover {
+            background-color: #f5f5f5;
+        }
+
+        .action-buttons button {
+            padding: 5px 10px;
+            margin: 0 2px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .edit-btn {
+            background: var(--primary);
+            color: white;
+        }
+
+        .delete-btn {
+            background: #ff4757;
+            color: white;
+        }
+
+        .developer-credit {
+            text-align: center;
+            margin-top: 30px;
+            color: #666;
+            font-size: 0.9em;
+            border-top: 1px solid #eee;
+            padding-top: 20px;
+        }
+
+        .import-export-buttons {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .import-export-buttons button {
+            margin: 0 5px;
+        }
+
+        @media (max-width: 768px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .container {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🦩 Flamingo Preening Study</h1>
+        
+        <div class="import-export-buttons">
+            <button onclick="exportToCSV()" style="background: var(--secondary);">
+                📤 Export CSV
+            </button>
+            <button onclick="document.getElementById('fileInput').click()" style="background: #4a4a4a;">
+                📥 Import CSV
+            </button>
+            <input type="file" id="fileInput" accept=".csv" style="display: none;">
+        </div>
+
+        <form id="dataForm">
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>Trial Number</label>
+                    <select id="trialNumber" required>
+                        <option value="">Select Trial</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Time Duration</label>
+                    <input type="text" id="timeDuration" readonly>
+                </div>
+
+                <div class="form-group">
+                    <label>Initial Ambient Temp (°C)</label>
+                    <input type="number" step="0.1" id="initialAmbient" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Final Ambient Temp (°C)</label>
+                    <input type="number" step="0.1" id="finalAmbient" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Water Temperature (°C)</label>
+                    <input type="number" step="0.1" id="waterTemp" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Initial Humidity (%)</label>
+                    <input type="number" step="0.1" id="initialHumidity" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Final Humidity (%)</label>
+                    <input type="number" step="0.1" id="finalHumidity" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Initial Light Intensity (lux)</label>
+                    <input type="number" id="initialLight" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Final Light Intensity (lux)</label>
+                    <input type="number" id="finalLight" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Extra Notes/Remarks</label>
+                <textarea id="notes" rows="3"></textarea>
+            </div>
+
+            <div style="text-align: center;">
+                <button type="submit" id="submitBtn">Save Entry</button>
+                <button type="button" onclick="clearLocalStorage()" style="background: #ff4757; margin-left: 10px;">
+                    Clear All Data
+                </button>
+            </div>
+        </form>
+
+        <h2>Saved Entries</h2>
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Trial</th>
+                    <th>Time</th>
+                    <th>Ambient Temp</th>
+                    <th>Water Temp</th>
+                    <th>Humidity</th>
+                    <th>Light</th>
+                    <th>Notes</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="dataTable">
+                <!-- Data populated by JavaScript -->
+            </tbody>
+        </table>
+
+        <div class="developer-credit">
+            Developed by R. Abishek (BSc Undergraduate @OUSL) as part of the ZYU4303 research project
+        </div>
+    </div>
+
+    <script>
+        let currentEditId = null;
+        const trialSelect = document.getElementById('trialNumber');
+        const timeInput = document.getElementById('timeDuration');
+
+        // Initialize trial dropdown
+        for (let i = 1; i <= 24; i++) {
+            const option = document.createElement('option');
+            option.value = i;
+            option.textContent = `Trial ${i}`;
+            trialSelect.appendChild(option);
+        }
+
+        // Time slot calculator
+        trialSelect.addEventListener('change', updateTimeSlot);
+
+        function updateTimeSlot() {
+            const trial = parseInt(trialSelect.value);
+            if (trial) {
+                const startHour = 9 + Math.floor((trial - 1) * 15 / 60);
+                const startMin = ((trial - 1) * 15) % 60;
+                const endMin = startMin + 15;
+                
+                const endHour = startHour + Math.floor(endMin / 60);
+                const formattedEndMin = (endMin % 60).toString().padStart(2, '0');
+                
+                timeInput.value = 
+                    `${startHour.toString().padStart(2, '0')}:${startMin.toString().padStart(2, '0')} - ` +
+                    `${endHour.toString().padStart(2, '0')}:${formattedEndMin}`;
+            }
+        }
+
+        // Local storage setup
+        if (!localStorage.getItem('flamingoData')) {
+            localStorage.setItem('flamingoData', JSON.stringify([]));
+        }
+
+        // Load saved data
+        document.addEventListener('DOMContentLoaded', loadSavedData);
+
+        function loadSavedData() {
+            const data = JSON.parse(localStorage.getItem('flamingoData'));
+            const tbody = document.getElementById('dataTable');
+            tbody.innerHTML = '';
+
+            data.forEach(entry => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${entry.trial}</td>
+                    <td>${entry.time}</td>
+                    <td>${entry.initialAmbient} → ${entry.finalAmbient}</td>
+                    <td>${entry.waterTemp}</td>
+                    <td>${entry.initialHumidity} → ${entry.finalHumidity}</td>
+                    <td>${entry.initialLight} → ${entry.finalLight}</td>
+                    <td>${entry.notes || ''}</td>
+                    <td class="action-buttons">
+                        <button class="edit-btn" onclick="editEntry('${entry.id}')">✏️</button>
+                        <button class="delete-btn" onclick="deleteEntry('${entry.id}')">🗑️</button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        function saveEntry(data, isEdit = false) {
+            const entries = JSON.parse(localStorage.getItem('flamingoData'));
+            
+            if (isEdit) {
+                const index = entries.findIndex(e => e.id === currentEditId);
+                entries[index] = {...data, id: currentEditId};
+            } else {
+                entries.push({...data, id: Date.now().toString()});
+            }
+
+            localStorage.setItem('flamingoData', JSON.stringify(entries));
+            loadSavedData();
+            currentEditId = null;
+            document.getElementById('submitBtn').textContent = 'Save Entry';
+        }
+
+        function editEntry(id) {
+            const entries = JSON.parse(localStorage.getItem('flamingoData'));
+            const entry = entries.find(e => e.id === id);
+            
+            trialSelect.value = entry.trial;
+            timeInput.value = entry.time;
+            document.getElementById('initialAmbient').value = entry.initialAmbient;
+            document.getElementById('finalAmbient').value = entry.finalAmbient;
+            document.getElementById('waterTemp').value = entry.waterTemp;
+            document.getElementById('initialHumidity').value = entry.initialHumidity;
+            document.getElementById('finalHumidity').value = entry.finalHumidity;
+            document.getElementById('initialLight').value = entry.initialLight;
+            document.getElementById('finalLight').value = entry.finalLight;
+            document.getElementById('notes').value = entry.notes;
+            
+            currentEditId = id;
+            document.getElementById('submitBtn').textContent = 'Update Entry';
+        }
+
+        function deleteEntry(id) {
+            if (confirm('Are you sure you want to delete this entry?')) {
+                const entries = JSON.parse(localStorage.getItem('flamingoData'));
+                const filtered = entries.filter(e => e.id !== id);
+                localStorage.setItem('flamingoData', JSON.stringify(filtered));
+                loadSavedData();
+            }
+        }
+
+        function exportToCSV() {
+            const data = JSON.parse(localStorage.getItem('flamingoData'));
+            const csvRows = [];
+            
+            const headers = [
+                'Trial Number', 'Time Duration', 
+                'Initial Ambient Temp', 'Final Ambient Temp',
+                'Water Temperature', 'Initial Humidity', 'Final Humidity',
+                'Initial Light Intensity', 'Final Light Intensity', 'Notes'
+            ];
+            csvRows.push(headers.join(','));
+
+            data.forEach(entry => {
+                const values = [
+                    entry.trial,
+                    entry.time,
+                    entry.initialAmbient,
+                    entry.finalAmbient,
+                    entry.waterTemp,
+                    entry.initialHumidity,
+                    entry.finalHumidity,
+                    entry.initialLight,
+                    entry.finalLight,
+                    `"${(entry.notes || '').replace(/"/g, '""')}"`
+                ];
+                csvRows.push(values.join(','));
+            });
+
+            const csvString = csvRows.join('\n');
+            const blob = new Blob([csvString], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'flamingo_data.csv';
+            a.click();
+            window.URL.revokeObjectURL(url);
+        }
+
+        // CSV Import Functionality
+        document.getElementById('fileInput').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                const csvData = parseCSV(event.target.result);
+                if (csvData.length > 0) {
+                    mergeCSVData(csvData);
+                    loadSavedData();
+                    alert(`Successfully imported ${csvData.length} entries!`);
+                }
+            };
+            reader.readAsText(file);
+        });
+
+        function parseCSV(csvText) {
+            const lines = csvText.split('\n').filter(line => line.trim() !== '');
+            const headers = lines[0].split(',').map(h => h.trim());
+            
+            return lines.slice(1).map(line => {
+                const values = line.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
+                const entry = {};
+                
+                headers.forEach((header, index) => {
+                    let value = values[index] || '';
+                    if (value.startsWith('"') && value.endsWith('"')) {
+                        value = value.slice(1, -1).replace(/""/g, '"');
+                    }
+                    entry[header] = value.trim();
+                });
+
+                return entry;
+            });
+        }
+
+        function mergeCSVData(csvData) {
+            const currentData = JSON.parse(localStorage.getItem('flamingoData') || '[]');
+            const newData = csvData.map(csvEntry => ({
+                id: Date.now() + '-' + Math.random().toString(36).substr(2, 9),
+                trial: csvEntry['Trial Number'],
+                time: csvEntry['Time Duration'],
+                initialAmbient: parseFloat(csvEntry['Initial Ambient Temp']),
+                finalAmbient: parseFloat(csvEntry['Final Ambient Temp']),
+                waterTemp: parseFloat(csvEntry['Water Temperature']),
+                initialHumidity: parseFloat(csvEntry['Initial Humidity']),
+                finalHumidity: parseFloat(csvEntry['Final Humidity']),
+                initialLight: parseInt(csvEntry['Initial Light Intensity']),
+                finalLight: parseInt(csvEntry['Final Light Intensity']),
+                notes: csvEntry['Notes']
+            }));
+
+            const mergedData = [...currentData, ...newData];
+            localStorage.setItem('flamingoData', JSON.stringify(mergedData));
+        }
+
+        function clearLocalStorage() {
+            if (confirm('This will delete ALL data permanently. Continue?')) {
+                localStorage.removeItem('flamingoData');
+                loadSavedData();
+            }
+        }
+
+        // Form submission
+        document.getElementById('dataForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = {
+                trial: trialSelect.value,
+                time: timeInput.value,
+                initialAmbient: document.getElementById('initialAmbient').value,
+                finalAmbient: document.getElementById('finalAmbient').value,
+                waterTemp: document.getElementById('waterTemp').value,
+                initialHumidity: document.getElementById('initialHumidity').value,
+                finalHumidity: document.getElementById('finalHumidity').value,
+                initialLight: document.getElementById('initialLight').value,
+                finalLight: document.getElementById('finalLight').value,
+                notes: document.getElementById('notes').value
+            };
+
+            saveEntry(formData, currentEditId !== null);
+            this.reset();
+            trialSelect.value = '';
+            timeInput.value = '';
+        });
+    </script>
+</body>
+</html>
