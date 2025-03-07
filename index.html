@@ -4,19 +4,27 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Flamingo Preening Study</title>
+    <!-- Google Fonts for a modern look -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary: #FF6B6B;
             --secondary: #4ECDC4;
             --background: linear-gradient(135deg, #ffd9da 0%, #c2e9fb 100%);
         }
+        
+        /* Global reset */
+        * {
+            box-sizing: border-box;
+        }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: var(--background);
             min-height: 100vh;
             padding: 20px;
             margin: 0;
+            color: #333;
         }
 
         .container {
@@ -36,6 +44,12 @@
             font-size: 2.5em;
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
         }
+        
+        h2 {
+            color: var(--primary);
+            text-align: center;
+            margin: 40px 0 20px;
+        }
 
         .form-grid {
             display: grid;
@@ -50,7 +64,6 @@
         label {
             display: block;
             margin-bottom: 5px;
-            color: #333;
             font-weight: 600;
         }
 
@@ -86,6 +99,45 @@
             box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4);
         }
 
+        .action-buttons button {
+            padding: 5px 10px;
+            margin: 0 2px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .edit-btn {
+            background: var(--primary);
+            color: white;
+        }
+
+        .delete-btn {
+            background: #ff4757;
+            color: white;
+        }
+
+        .import-export-buttons {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .import-export-buttons button {
+            margin: 0 5px;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        .developer-credit {
+            text-align: center;
+            margin-top: 30px;
+            color: #666;
+            font-size: 0.9em;
+            border-top: 1px solid #eee;
+            padding-top: 20px;
+        }
+
         .data-table {
             margin-top: 30px;
             width: 100%;
@@ -110,49 +162,49 @@
             background-color: #f5f5f5;
         }
 
-        .action-buttons button {
-            padding: 5px 10px;
-            margin: 0 2px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
+        /* Responsive table wrapper for small devices */
+        .table-responsive {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
         }
 
-        .edit-btn {
-            background: var(--primary);
-            color: white;
-        }
-
-        .delete-btn {
-            background: #ff4757;
-            color: white;
-        }
-
-        .developer-credit {
-            text-align: center;
-            margin-top: 30px;
-            color: #666;
-            font-size: 0.9em;
-            border-top: 1px solid #eee;
-            padding-top: 20px;
-        }
-
-        .import-export-buttons {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        .import-export-buttons button {
-            margin: 0 5px;
-        }
-
+        /* Media queries for mobile responsiveness */
         @media (max-width: 768px) {
             .form-grid {
                 grid-template-columns: 1fr;
             }
             
             .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            button {
+                font-size: 16px;
+                padding: 12px 25px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+            
+            .container {
                 padding: 15px;
+            }
+            
+            h1 {
+                font-size: 1.8em;
+            }
+            
+            .import-export-buttons button {
+                font-size: 14px;
+                padding: 8px 15px;
+                margin: 5px 0;
             }
         }
     </style>
@@ -235,26 +287,28 @@
         </form>
 
         <h2>Saved Entries</h2>
-        <table class="data-table">
-            <thead>
-                <tr>
-                    <th>Trial</th>
-                    <th>Time</th>
-                    <th>Ambient Temp</th>
-                    <th>Water Temp</th>
-                    <th>Humidity</th>
-                    <th>Light</th>
-                    <th>Notes</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody id="dataTable">
-                <!-- Data populated by JavaScript -->
-            </tbody>
-        </table>
+        <div class="table-responsive">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Trial</th>
+                        <th>Time</th>
+                        <th>Ambient Temp</th>
+                        <th>Water Temp</th>
+                        <th>Humidity</th>
+                        <th>Light</th>
+                        <th>Notes</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="dataTable">
+                    <!-- Data populated by JavaScript -->
+                </tbody>
+            </table>
+        </div>
 
         <div class="developer-credit">
-            Developed by R. Abishek (BSc Undergraduate @OUSL) as part of the ZYU4303 research project
+            Developed by R. Abishek (BSc Undergraduate) as part of the ZYU4303 research project
         </div>
     </div>
 
@@ -280,10 +334,8 @@
                 const startHour = 9 + Math.floor((trial - 1) * 15 / 60);
                 const startMin = ((trial - 1) * 15) % 60;
                 const endMin = startMin + 15;
-                
                 const endHour = startHour + Math.floor(endMin / 60);
                 const formattedEndMin = (endMin % 60).toString().padStart(2, '0');
-                
                 timeInput.value = 
                     `${startHour.toString().padStart(2, '0')}:${startMin.toString().padStart(2, '0')} - ` +
                     `${endHour.toString().padStart(2, '0')}:${formattedEndMin}`;
